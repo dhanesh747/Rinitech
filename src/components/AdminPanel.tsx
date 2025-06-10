@@ -19,9 +19,11 @@ import {
   AlertTriangle,
   RefreshCw,
   Database,
-  Upload
+  Upload,
+  Image,
+  Plus
 } from 'lucide-react';
-import { Quote, AdminStats } from '../types';
+import { Quote, AdminStats, GalleryItem } from '../types';
 import { 
   getQuotes, 
   updateQuote, 
@@ -29,7 +31,11 @@ import {
   getStats, 
   clearDatabase, 
   exportDatabase, 
-  importDatabase 
+  importDatabase,
+  getGalleryItems,
+  saveGalleryItem,
+  deleteGalleryItem,
+  generateGalleryId
 } from '../utils/database';
 
 interface AdminPanelProps {
@@ -43,7 +49,15 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
   const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null);
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [stats, setStats] = useState<AdminStats>({ totalQuotes: 0, newQuotes: 0, activeProjects: 0, totalRevenue: '₹0' });
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [showGalleryForm, setShowGalleryForm] = useState(false);
+  const [galleryForm, setGalleryForm] = useState({
+    title: '',
+    description: '',
+    category: '',
+    imageUrl: ''
+  });
 
   useEffect(() => {
     loadData();
@@ -54,8 +68,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
     try {
       const quotesData = getQuotes();
       const statsData = getStats();
+      const galleryData = getGalleryItems();
       setQuotes(quotesData);
       setStats(statsData);
+      setGalleryItems(galleryData);
     } catch (error) {
       console.error('Error loading data:', error);
     } finally {
@@ -113,6 +129,32 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
         }
       };
       reader.readAsText(file);
+    }
+  };
+
+  const handleGallerySubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!galleryForm.title || !galleryForm.imageUrl) return;
+
+    const newItem: GalleryItem = {
+      id: generateGalleryId(),
+      title: galleryForm.title,
+      description: galleryForm.description,
+      category: galleryForm.category || 'general',
+      imageUrl: galleryForm.imageUrl,
+      createdAt: Date.now()
+    };
+
+    saveGalleryItem(newItem);
+    setGalleryForm({ title: '', description: '', category: '', imageUrl: '' });
+    setShowGalleryForm(false);
+    loadData();
+  };
+
+  const handleDeleteGalleryItem = (id: string) => {
+    if (window.confirm('Are you sure you want to delete this gallery item?')) {
+      deleteGalleryItem(id);
+      loadData();
     }
   };
 
@@ -180,6 +222,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
 
   const tabs = [
     { id: 'quotes', name: 'Quote Requests', icon: MessageSquare },
+    { id: 'gallery', name: 'Gallery Management', icon: Image },
     { id: 'analytics', name: 'Analytics', icon: BarChart3 },
     { id: 'clients', name: 'Clients', icon: Users },
     { id: 'database', name: 'Database', icon: Database },
@@ -402,6 +445,128 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                         ))}
                       </tbody>
                     </table>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'gallery' && (
+            <div className="space-y-6">
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold text-white">Gallery Management</h2>
+                <button
+                  onClick={() => setShowGalleryForm(true)}
+                  className="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors duration-200"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Add New Item</span>
+                </button>
+              </div>
+
+              {/* Add Gallery Item Form */}
+              {showGalleryForm && (
+                <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                  <h3 className="text-lg font-semibold text-white mb-4">Add Gallery Item</h3>
+                  <form onSubmit={handleGallerySubmit} className="space-y-4">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Title *</label>
+                        <input
+                          type="text"
+                          required
+                          value={galleryForm.title}
+                          onChange={(e) => setGalleryForm({...galleryForm, title: e.target.value})}
+                          className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          placeholder="Project title"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Category</label>
+                        <input
+                          type="text"
+                          value={galleryForm.category}
+                          onChange={(e) => setGalleryForm({...galleryForm, category: e.target.value})}
+                          className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          placeholder="e.g., web design, graphic design"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Image URL *</label>
+                      <input
+                        type="url"
+                        required
+                        value={galleryForm.imageUrl}
+                        onChange={(e) => setGalleryForm({...galleryForm, imageUrl: e.target.value})}
+                        className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="https://example.com/image.jpg"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Description</label>
+                      <textarea
+                        value={galleryForm.description}
+                        onChange={(e) => setGalleryForm({...galleryForm, description: e.target.value})}
+                        rows={3}
+                        className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Project description"
+                      />
+                    </div>
+                    <div className="flex space-x-3">
+                      <button
+                        type="submit"
+                        className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors duration-200"
+                      >
+                        Add Item
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setShowGalleryForm(false)}
+                        className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors duration-200"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              )}
+
+              {/* Gallery Items */}
+              <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
+                {galleryItems.length === 0 ? (
+                  <div className="p-12 text-center">
+                    <Image className="w-12 h-12 text-gray-500 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-400 mb-2">No gallery items</h3>
+                    <p className="text-gray-500">Add your first gallery item to showcase your work.</p>
+                  </div>
+                ) : (
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+                    {galleryItems.map((item) => (
+                      <div key={item.id} className="bg-gray-700 rounded-lg overflow-hidden">
+                        <img
+                          src={item.imageUrl}
+                          alt={item.title}
+                          className="w-full h-48 object-cover"
+                        />
+                        <div className="p-4">
+                          <h4 className="text-white font-medium mb-2">{item.title}</h4>
+                          <p className="text-gray-400 text-sm mb-2">{item.description}</p>
+                          <div className="flex justify-between items-center">
+                            <span className="px-2 py-1 bg-blue-600 text-white text-xs rounded">
+                              {item.category}
+                            </span>
+                            <button
+                              onClick={() => handleDeleteGalleryItem(item.id)}
+                              className="p-1 bg-red-600 hover:bg-red-700 rounded transition-colors duration-200"
+                              title="Delete Item"
+                            >
+                              <Trash2 className="w-4 h-4 text-white" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>

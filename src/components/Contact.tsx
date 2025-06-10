@@ -24,8 +24,8 @@ const Contact = () => {
     {
       icon: Phone,
       title: 'Phone',
-      details: '+91 73047 03650',
-      href: 'tel:+917304703650',
+      details: '+91 84520 21168',
+      href: 'tel:+918452021168',
     },
     {
       icon: MapPin,
@@ -41,8 +41,10 @@ const Contact = () => {
     'Website Development',
     'Translations & Transcription',
     'Video Editing',
+    'Reels Editing',
     'Content Writing',
-    'Digital Marketing'
+    'Digital Marketing',
+    '3D Printing'
   ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {

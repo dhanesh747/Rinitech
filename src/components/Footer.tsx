@@ -27,8 +27,8 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="w-4 h-4 text-blue-400" />
-                <a href="tel:+917304703650" className="text-gray-300 hover:text-blue-400 transition-colors">
-                  +91 73047 03650
+                <a href="tel:+918452021168" className="text-gray-300 hover:text-blue-400 transition-colors">
+                  +91 84520 21168
                 </a>
               </div>
             </div>
@@ -41,7 +41,7 @@ const Footer = () => {
               <li><span className="text-gray-300 hover:text-blue-400 transition-colors cursor-pointer">DTP Localization</span></li>
               <li><span className="text-gray-300 hover:text-blue-400 transition-colors cursor-pointer">Graphic Designing</span></li>
               <li><span className="text-gray-300 hover:text-blue-400 transition-colors cursor-pointer">Website Development</span></li>
-              <li><span className="text-gray-300 hover:text-blue-400 transition-colors cursor-pointer">Translations</span></li>
+              <li><span className="text-gray-300 hover:text-blue-400 transition-colors cursor-pointer">Reels Editing</span></li>
               <li><span className="text-gray-300 hover:text-blue-400 transition-colors cursor-pointer">Digital Marketing</span></li>
             </ul>
           </div>
@@ -52,6 +52,7 @@ const Footer = () => {
             <ul className="space-y-2">
               <li><a href="#home" className="text-gray-300 hover:text-blue-400 transition-colors">Home</a></li>
               <li><a href="#services" className="text-gray-300 hover:text-blue-400 transition-colors">Services</a></li>
+              <li><a href="#gallery" className="text-gray-300 hover:text-blue-400 transition-colors">Gallery</a></li>
               <li><a href="#about" className="text-gray-300 hover:text-blue-400 transition-colors">About</a></li>
               <li><a href="#contact" className="text-gray-300 hover:text-blue-400 transition-colors">Contact</a></li>
             </ul>

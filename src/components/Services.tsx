@@ -7,6 +7,7 @@ import {
   Video,
   PenTool,
   TrendingUp,
+  Film,
 } from 'lucide-react';
 import ServiceModal from './ServiceModal';
 
@@ -204,6 +205,45 @@ const servicesData = [
         'Delivery specifications'
       ],
       timeline: '5-20 business days depending on length'
+    }
+  },
+  {
+    icon: Film,
+    title: 'Reels Editing',
+    description: 'Creating engaging short-form video content optimized for social media platforms and maximum reach.',
+    color: 'from-pink-500 to-rose-600',
+    details: {
+      overview: 'Capture attention and drive engagement with professionally edited reels. Our reel editing service specializes in creating viral-worthy content that resonates with your target audience across all social media platforms.',
+      features: [
+        'Trending format adaptation',
+        'Music and sound synchronization',
+        'Dynamic transitions and effects',
+        'Text overlay and captions',
+        'Platform-specific optimization',
+        'Hashtag and trend research'
+      ],
+      benefits: [
+        'Increased social media reach',
+        'Higher engagement rates',
+        'Viral content potential',
+        'Brand awareness boost',
+        'Cost-effective marketing'
+      ],
+      process: [
+        'Content strategy and planning',
+        'Raw footage review and selection',
+        'Creative editing and effects',
+        'Music and audio integration',
+        'Platform optimization and delivery'
+      ],
+      deliverables: [
+        'Edited reel videos',
+        'Multiple aspect ratios',
+        'Thumbnail options',
+        'Caption suggestions',
+        'Posting schedule recommendations'
+      ],
+      timeline: '2-5 business days per reel'
     }
   },
   {

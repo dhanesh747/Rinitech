@@ -1,4 +1,4 @@
-import { Quote, AdminStats } from '../types';
+import { Quote, AdminStats, GalleryItem } from '../types';
 
 // Database file path (simulated with localStorage for web compatibility)
 const DATABASE_KEY = 'ronitech_database';
@@ -6,6 +6,7 @@ const DATABASE_KEY = 'ronitech_database';
 interface Database {
   quotes: Quote[];
   stats: AdminStats;
+  gallery: GalleryItem[];
   lastUpdated: string;
 }
 
@@ -13,6 +14,7 @@ interface Database {
 const initializeDatabase = (): Database => {
   return {
     quotes: [],
+    gallery: [],
     stats: {
       totalQuotes: 0,
       newQuotes: 0,
@@ -97,6 +99,28 @@ export const getStats = (): AdminStats => {
 
 export const generateQuoteId = (): string => {
   return `quote_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+};
+
+// Gallery operations
+export const saveGalleryItem = (item: GalleryItem): void => {
+  const db = loadDatabase();
+  db.gallery.push(item);
+  saveDatabase(db);
+};
+
+export const getGalleryItems = (): GalleryItem[] => {
+  const db = loadDatabase();
+  return db.gallery.sort((a, b) => b.createdAt - a.createdAt);
+};
+
+export const deleteGalleryItem = (id: string): void => {
+  const db = loadDatabase();
+  db.gallery = db.gallery.filter(item => item.id !== id);
+  saveDatabase(db);
+};
+
+export const generateGalleryId = (): string => {
+  return `gallery_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 };
 
 // Database management

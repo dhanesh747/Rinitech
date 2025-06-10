@@ -24,3 +24,21 @@ export interface AdminStats {
   activeProjects: number;
   totalRevenue: string;
 }
+
+export interface GalleryItem {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  category: string;
+  createdAt: number;
+}
+
+export interface ServiceInfo {
+  title: string;
+  description: string;
+  features: string[];
+  benefits: string[];
+  pricing: string;
+  timeline: string;
+}
