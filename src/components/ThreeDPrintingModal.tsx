@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Cube, CheckCircle, Clock, Users, Star, Printer, Layers, Zap } from 'lucide-react';
+import { X, Cuboid as Cube, CheckCircle, Clock, Users, Star, Printer, Layers, Zap } from 'lucide-react';
 
 interface ThreeDPrintingModalProps {
   isOpen: boolean;

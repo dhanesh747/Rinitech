@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, Bot, Cube, Shield } from 'lucide-react';
+import { Menu, X, Bot, Cuboid as Cube, Shield } from 'lucide-react';
 import ThreeDPrintingModal from './ThreeDPrintingModal';
 import TrustCenterModal from './TrustCenterModal';
 
