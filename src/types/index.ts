@@ -1,0 +1,26 @@
+export interface Quote {
+  id: string;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  service: string;
+  date: string;
+  status: 'new' | 'reviewed' | 'responded' | 'closed';
+  priority: 'low' | 'medium' | 'high';
+  createdAt: number;
+}
+
+export interface ChatMessage {
+  id: string;
+  content: string;
+  role: 'user' | 'assistant';
+  timestamp: number;
+}
+
+export interface AdminStats {
+  totalQuotes: number;
+  newQuotes: number;
+  activeProjects: number;
+  totalRevenue: string;
+}
